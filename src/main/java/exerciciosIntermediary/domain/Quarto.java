@@ -14,8 +14,10 @@ public class Quarto {
     public void reservar(){
         if (status.equals("disponivel")){
             status = "ocupado";
-        }else{
+        }else if(status.equals("ocupado")){
             throw new IllegalStateException("Quarto indisponivel !");
+        }else{
+            status = "Reservado";
         }
     }
 
