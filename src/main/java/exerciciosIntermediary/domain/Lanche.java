@@ -14,5 +14,4 @@ public class Lanche {
     public String getNome() { return nome; }
     public double getPreco() { return preco; }
     public boolean isDisponivel() { return disponivel; }
-    public void setDisponivel(boolean disponivel) { this.disponivel = disponivel; }
 }

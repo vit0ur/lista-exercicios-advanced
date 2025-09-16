@@ -15,6 +15,6 @@ public class InMemoryFuncionarioRepository implements FuncionarioRepository {
 
     @Override
     public List<Funcionario> listarTodos() {
-        return List.of();
+        return funcionarios;
     }
 }
