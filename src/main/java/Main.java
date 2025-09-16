@@ -4,8 +4,8 @@ import exerciciosInitial.application.ListarFuncionarios;
 import exerciciosInitial.domain.Filme;
 import exerciciosInitial.dto.FuncionarioDTO;
 import exerciciosInitial.infrastructure.InMemoryAlunoRepository;
-import exerciciosInitial.infrastructure.InMemoryFuncionarioRepository;
 import exerciciosInitial.infrastructure.InMemoryFilmeRepository;
+import exerciciosInitial.infrastructure.InMemoryFuncionarioRepository;
 import exerciciosIntermediary.application.*;
 import exerciciosIntermediary.domain.Lanche;
 import exerciciosIntermediary.domain.Pedido;
@@ -18,10 +18,13 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        System.out.println("=== Parte 1 - Exercícios Fáceis ===");
 
-        //Cadastro de Aluno
+        // Exercício 1 – Cadastro de Aluno
         InMemoryAlunoRepository alunoRepo = new InMemoryAlunoRepository();
         CadastrarAluno cadastrarAluno = new CadastrarAluno(alunoRepo);
+        cadastrarAluno.executar("Vitor", "2025001", "Engenharia");
+        System.out.println("Aluno cadastrado: " + alunoRepo.listarTodos().stream().findFirst().get().getNome());
 
         cadastrarAluno.executar("João Silva", "2025001", "Engenharia");
         System.out.println("Aluno cadastrado: " + alunoRepo.listarTodos().get(0).getNome());
@@ -32,9 +35,12 @@ public class Main {
         InMemoryFuncionarioRepository funcRepo = new InMemoryFuncionarioRepository();
         ListarFuncionarios listarFuncionarios = new ListarFuncionarios(funcRepo);
 
+        System.out.println("Lista de funcionários:");
+        listarFuncionarios.executar().forEach(System.out::println);
         List<FuncionarioDTO> listaFuncionarios = listarFuncionarios.executar();
         listaFuncionarios.forEach(f -> System.out.println("Funcionários: " + " - " + f.getNome() + ", " + f.getCargo() + ", " + f.getSalario()));
 
+        // Exercício 3 – Buscar Filme por Título
         System.out.println("====================== ======================");
 
         //Buscar Filme por Título
@@ -42,10 +48,12 @@ public class Main {
         BuscarFilmePorTitulo buscarFilme = new BuscarFilmePorTitulo(filmeRepo);
 
         try {
-             Filme filme = buscarFilme.executar(filmeRepo.buscarPorTitulo("matrix").get().getTitulo());
-             System.out.println("Filme encontrado: " + filme.getTitulo() + " (" + filme.getAno() + ")" + filme.getGenero());
-        } catch (RuntimeException ex) {
-            System.out.println("Erro: " + ex.getMessage());
+            Filme filme = buscarFilme.executar("Matrix");
+            System.out.println("Filme encontrado: " + filme.getTitulo());
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            Filme filme = buscarFilme.executar(filmeRepo.buscarPorTitulo("matrix").get().getTitulo());
+            System.out.println("Filme encontrado: " + filme.getTitulo() + " (" + filme.getAno() + ")" + filme.getGenero());
         }
 
         System.out.println("====================== ======================");
@@ -96,7 +104,7 @@ public class Main {
         facade.listarLanches().forEach(l -> System.out.println(" - " + l.getNome() + " por R$" + l.getPreco() + (l.isDisponivel() ? "" : " (INDISPONÍVEL)")));
 
         Pedido pedido = facade.criarPedido(lancheRepo.listarTodos());
-        System.out.println("Valor do pedido: " + pedido.getValorTotal());
+        System.out.println("Pedido criado: " + pedido);
 
         facade.finalizarPedido(pedido);
         System.out.println("Status após finalizar: " + pedido.isFinalizado());
